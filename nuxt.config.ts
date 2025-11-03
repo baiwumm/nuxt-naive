@@ -1,29 +1,10 @@
+import tailwindcss from '@tailwindcss/vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
 import Components from 'unplugin-vue-components/vite'
-import tailwindcss from '@tailwindcss/vite'
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: '2025-07-15',
-  devtools: { enabled: true },
-  devServer: {
-    port: 5173
-  },
-  build: {
-    transpile: ['naive-ui', 'vueuc'],
-  },
-  app: {
-    pageTransition: { name: 'page', mode: 'out-in' }, // 页面过渡效果
-    head: {
-      link: [
-        {
-          rel: "stylesheet",
-          href: "https://cdn.baiwumm.com/fonts/MapleMono-CN-Regular/result.css"
-        }
-      ]
-    }
-  },
   modules: [
     '@nuxt/eslint',
     'nuxtjs-naive-ui',
@@ -32,13 +13,33 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@bubblesortt/nuxt-es-toolkit',
     '@nuxtjs/color-mode',
-    '@nuxt/icon'
+    '@nuxt/icon',
   ],
-  // pinia-plugin-persistedstate 配置
-  piniaPluginPersistedstate: {
-    storage: 'localStorage',
-    key: 'pinia_%id'
+  devtools: { enabled: true },
+  app: {
+    pageTransition: { name: 'page', mode: 'out-in' }, // 页面过渡效果
+    head: {
+      link: [
+        {
+          rel: 'stylesheet',
+          href: 'https://cdn.baiwumm.com/fonts/MapleMono-CN-Regular/result.css',
+        },
+      ],
+    },
   },
+  // 全局 CSS
+  css: ['~/assets/css/main.css'],
+  // @nuxtjs/color-mode 配置
+  colorMode: {
+    classSuffix: '',
+  },
+  build: {
+    transpile: ['naive-ui', 'vueuc'],
+  },
+  devServer: {
+    port: 5173,
+  },
+  compatibilityDate: '2025-07-15',
   // Vite 配置
   vite: {
     plugins: [
@@ -50,13 +51,13 @@ export default defineNuxtConfig({
               'useDialog',
               'useMessage',
               'useNotification',
-              'useLoadingBar'
-            ]
-          }
-        ]
+              'useLoadingBar',
+            ],
+          },
+        ],
       }),
       Components({
-        resolvers: [NaiveUiResolver()]
+        resolvers: [NaiveUiResolver()],
       }),
     ],
     optimizeDeps: {
@@ -67,16 +68,20 @@ export default defineNuxtConfig({
       // 强制预构建时将 vueuc 作为 ESM 处理
       esbuildOptions: {
         resolveExtensions: ['.js', '.cjs'],
-      }
+      },
     },
     ssr: {
-      noExternal: ['vueuc'] // 确保 SSR 时也正确处理
-    }
+      noExternal: ['vueuc'], // 确保 SSR 时也正确处理
+    },
   },
-  // 全局 CSS
-  css: ['~/assets/css/main.css'],
-  // @nuxtjs/color-mode 配置
-  colorMode: {
-    classSuffix: ''
+  // pinia-plugin-persistedstate 配置
+  piniaPluginPersistedstate: {
+    storage: 'localStorage',
+    key: 'pinia_%id',
+  },
+  eslint: {
+    config: {
+      stylistic: true
+    }
   },
 })

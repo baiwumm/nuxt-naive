@@ -1,56 +1,64 @@
 <template>
-  <NTooltip placement="bottom" trigger="hover">
+  <n-tooltip placement='bottom' trigger='hover'>
     <template #trigger>
-      <NButton quaternary circle @click="toggleDark">
+      <n-button quaternary circle @click="toggleDark">
         <template #icon>
-          <Icon :name="$colorMode.value === 'dark' ? 'i-heroicons-moon-solid' : 'i-heroicons-sun-solid'" />
+          <Icon :name="isDark ? 'i-heroicons-moon-solid' : 'i-heroicons-sun-solid'" />
         </template>
-      </NButton>
+      </n-button>
     </template>
     切换主题
-  </NTooltip>
+  </n-tooltip>
 </template>
+
 <script setup lang="ts">
-const colorMode = useColorMode();
+import { storeToRefs } from "pinia"
+
+import { useThemeStore } from '@/stores/themeStore'
+import { THEME } from '@/utils/constant'
+
+const colorMode = useColorMode()
+
+const themeStore = useThemeStore()
+const { isDark } = storeToRefs(themeStore)
 
 // 切换模式
 const setColorMode = () => {
-  colorMode.value = colorMode.value === "dark" ? "light" : "dark";
-};
+  colorMode.value = isDark.value ? THEME.LIGHT : THEME.DARK
+}
 
 // 判断是否支持 startViewTransition API
 const enableTransitions = () =>
-  "startViewTransition" in document && window.matchMedia("(prefers-reduced-motion: no-preference)").matches;
+  'startViewTransition' in document && window.matchMedia('(prefers-reduced-motion: no-preference)').matches
 
 // 切换动画
 async function toggleDark({ clientX: x, clientY: y }: MouseEvent) {
-  const isDark = colorMode.value === "dark";
-
   if (!enableTransitions()) {
-    setColorMode();
-    return;
+    setColorMode()
+    return
   }
 
   const clipPath = [
     `circle(0px at ${x}px ${y}px)`,
     `circle(${Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y))}px at ${x}px ${y}px)`,
-  ];
+  ]
 
   await document.startViewTransition(async () => {
-    setColorMode();
-    await nextTick();
-  }).ready;
+    setColorMode()
+    await nextTick()
+  }).ready
 
   document.documentElement.animate(
-    { clipPath: !isDark ? clipPath.reverse() : clipPath },
+    { clipPath: !isDark.value ? clipPath.reverse() : clipPath },
     {
       duration: 300,
-      easing: "ease-in",
-      pseudoElement: `::view-transition-${!isDark ? "old" : "new"}(root)`,
-    }
-  );
+      easing: 'ease-in',
+      pseudoElement: `::view-transition-${!isDark.value ? 'old' : 'new'}(root)`,
+    },
+  )
 }
 </script>
+
 <style>
 ::view-transition-old(root),
 ::view-transition-new(root) {

@@ -1,21 +1,27 @@
-// @ts-check
 import withNuxt from "./.nuxt/eslint.config.mjs";
-import importPlugin from "eslint-plugin-import";
 
-export default withNuxt(
-  // Your custom configs here
+export default withNuxt([
   {
-    plugins: {
-      import: importPlugin,
+    ...withNuxt()[0], // 继承 Nuxt 默认配置
+  },
+  {
+    // 自定义 ESLint 配置：针对 JS/TS/Vue 文件
+    files: ["**/*.js", "**/*.ts", "**/*.vue"],
+    languageOptions: {
+      parserOptions: {
+        ecmaVersion: 2022,
+        sourceType: "module",
+      },
     },
     settings: {
       "import/resolver": {
+        // 使用 TypeScript 解析器，并指向 Nuxt 的 tsconfig
         typescript: {
           project: "./tsconfig.json",
         },
         node: {
           extensions: [".js", ".ts", ".vue", ".tsx"],
-        },
+        }
       },
     },
     rules: {
@@ -25,8 +31,8 @@ export default withNuxt(
       "import/default": "error",
       "import/namespace": "error",
       "import/export": "error",
-
-      // 代码风格规则
+      
+      // 排序规则
       "import/order": [
         "error",
         {
@@ -39,5 +45,5 @@ export default withNuxt(
       "import/no-absolute-path": "error",
       "import/no-cycle": "warn",
     },
-  }
-);
+  },
+]);

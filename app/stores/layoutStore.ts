@@ -3,10 +3,10 @@
  * @Date: 2025-10-28 22:20:40
  * @LastEditors: 白雾茫茫丶<baiwumm.com>
  * @LastEditTime: 2025-10-29 02:18:04
- * @Description: 主题配置
+ * @Description: 布局配置
  */
-import { defineStore } from 'pinia';
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
+import { defineStore } from 'pinia';
 
 function useMobile() {
   const breakpoints = useBreakpoints(breakpointsTailwind)
