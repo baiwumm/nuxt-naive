@@ -7,27 +7,28 @@
     <NuxtPage />
   </NuxtLayout>
 </template>
+
 <script setup lang="ts">
-const nuxtApp = useNuxtApp();
+const nuxtApp = useNuxtApp()
 
 // 是否首次加载
-const isFullLoading = ref(true);
+const isFullLoading = ref(true)
 
-nuxtApp.hook("page:start", () => {
-  isFullLoading.value = true;
-});
+nuxtApp.hook('page:start', () => {
+  isFullLoading.value = true
+})
 
-nuxtApp.hook("page:finish", () => {
-  isFullLoading.value = false;
-});
+nuxtApp.hook('page:finish', () => {
+  isFullLoading.value = false
+})
 
 useHead({
-  link: [{ rel: "icon", type: "image/x-icon", href: "favicon.ico" }],
+  link: [{ rel: 'icon', type: 'image/x-icon', href: 'favicon.ico' }],
   meta: [
-    { name: "keywords", content: "Naive UI,Nuxt.js,Naive UI Pro" },
-    { name: "description", content: "一个基于 Nuxt.js 和 Naive UI 的后台模板" },
+    { name: 'keywords', content: 'Naive UI,Nuxt.js,Naive UI Pro' },
+    { name: 'description', content: '一个基于 Nuxt.js 和 Naive UI 的后台模板' },
   ],
-});
+})
 </script>
 
 <style>

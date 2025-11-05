@@ -31,6 +31,7 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
   // @nuxtjs/color-mode 配置
   colorMode: {
+    preference: 'light', // 默认偏好
     classSuffix: '',
   },
   build: {
@@ -74,14 +75,14 @@ export default defineNuxtConfig({
       noExternal: ['vueuc'], // 确保 SSR 时也正确处理
     },
   },
+  eslint: {
+    config: {
+      stylistic: true,
+    },
+  },
   // pinia-plugin-persistedstate 配置
   piniaPluginPersistedstate: {
     storage: 'localStorage',
     key: 'pinia_%id',
-  },
-  eslint: {
-    config: {
-      stylistic: true
-    }
   },
 })

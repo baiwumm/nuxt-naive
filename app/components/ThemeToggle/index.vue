@@ -1,9 +1,9 @@
 <template>
-  <n-tooltip placement='bottom' trigger='hover'>
+  <n-tooltip placement="bottom" trigger="hover">
     <template #trigger>
       <n-button quaternary circle @click="toggleDark">
         <template #icon>
-          <Icon :name="isDark ? 'i-heroicons-moon-solid' : 'i-heroicons-sun-solid'" />
+          <Icon :name="$colorMode.preference === THEME.DARK ? 'i-heroicons-moon-solid' : 'i-heroicons-sun-solid'" />
         </template>
       </n-button>
     </template>
@@ -12,8 +12,6 @@
 </template>
 
 <script setup lang="ts">
-import { storeToRefs } from "pinia"
-
 import { useThemeStore } from '@/stores/themeStore'
 import { THEME } from '@/utils/constant'
 
@@ -22,19 +20,15 @@ const colorMode = useColorMode()
 const themeStore = useThemeStore()
 const { isDark } = storeToRefs(themeStore)
 
-// 切换模式
-const setColorMode = () => {
-  colorMode.value = isDark.value ? THEME.LIGHT : THEME.DARK
-}
-
 // 判断是否支持 startViewTransition API
 const enableTransitions = () =>
   'startViewTransition' in document && window.matchMedia('(prefers-reduced-motion: no-preference)').matches
 
 // 切换动画
 async function toggleDark({ clientX: x, clientY: y }: MouseEvent) {
+  const isDark = colorMode.value === 'dark'
   if (!enableTransitions()) {
-    setColorMode()
+    themeStore.setColorMode(isDark ? THEME.LIGHT : THEME.DARK)
     return
   }
 
@@ -44,16 +38,16 @@ async function toggleDark({ clientX: x, clientY: y }: MouseEvent) {
   ]
 
   await document.startViewTransition(async () => {
-    setColorMode()
+    themeStore.setColorMode(isDark ? THEME.LIGHT : THEME.DARK)
     await nextTick()
   }).ready
 
   document.documentElement.animate(
-    { clipPath: !isDark.value ? clipPath.reverse() : clipPath },
+    { clipPath: !isDark ? clipPath.reverse() : clipPath },
     {
       duration: 300,
       easing: 'ease-in',
-      pseudoElement: `::view-transition-${!isDark.value ? 'old' : 'new'}(root)`,
+      pseudoElement: `::view-transition-${!isDark ? 'old' : 'new'}(root)`,
     },
   )
 }
