@@ -75,6 +75,9 @@ export default defineNuxtConfig({
       noExternal: ['vueuc'], // 确保 SSR 时也正确处理
     },
   },
+  typescript: {
+    typeCheck: true,
+  },
   eslint: {
     config: {
       stylistic: true,
