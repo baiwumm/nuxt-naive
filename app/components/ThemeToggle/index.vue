@@ -18,7 +18,6 @@ import { THEME } from '@/utils/constant'
 const colorMode = useColorMode()
 
 const themeStore = useThemeStore()
-const { isDark } = storeToRefs(themeStore)
 
 // 判断是否支持 startViewTransition API
 const enableTransitions = () =>
